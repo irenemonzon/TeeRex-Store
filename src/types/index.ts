@@ -10,6 +10,11 @@ export interface Product {
     quantity: number;
 }
 
+export interface CartItem extends Product {
+    quantityTotalCart: number;
+    subtotal: number;
+}
+
 export type FilterValues = {
     color: string[];
     gender: string[];
