@@ -1,7 +1,8 @@
 import { toast } from 'sonner';
 import { useCartStore } from '../store/cartStore';
-import type { Product } from '../types';
 import QuantityControls from './QuantityControls';
+import { formatCurrency } from '../utils';
+import type { Product } from '../types';
 
 interface Props {
   product: Product;
@@ -38,7 +39,7 @@ const ProductCard = ({ product }: Props) => {
       <div className='flex w-full justify-between'>
         <div className='flex flex-col mt-4'>
           <span className="text-base font-bold">
-            {product.currency} {product.price.toFixed(2)}
+            {formatCurrency(product.price, product.currency)}
           </span>
           <span
             className={`text-sm mt-1 ${

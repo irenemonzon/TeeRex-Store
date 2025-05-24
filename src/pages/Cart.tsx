@@ -2,6 +2,7 @@ import { useCartStore } from '../store/cartStore';
 import {Trash2} from 'lucide-react';
 import { toast } from 'sonner';
 import QuantityControls from '../components/QuantityControls';
+import { formatCurrency } from '../utils';
 
 const Cart = () => {
   const cart = useCartStore((state) => state.cart);
@@ -46,7 +47,7 @@ const Cart = () => {
           <div className="flex-1">
             <h2 className="text-lg font-semibold">{item.name}</h2>
             <p className="text-sm text-gray-500">
-              {item.currency} {item.price.toFixed(2)} each
+              {formatCurrency(item.price, item.currency)} each
             </p>
             <p className="text-xs text-gray-400 mt-1">
               Available: {item.quantity -item.quantityTotalCart}
@@ -62,7 +63,7 @@ const Cart = () => {
 
           <div className="text-right">
             <p className="font-bold">Subtotal:</p>
-            <p>{item.currency} {item.subtotal.toFixed(2)}</p>
+            <p>{formatCurrency(item.subtotal, item.currency)}</p>
             <button
               onClick={() => removeItem(item.id)}
               className="text-red-500 mt-2 hover:text-red-700 transition-colors"
@@ -84,7 +85,7 @@ const Cart = () => {
           </button>
         </div>
         <div className="text-xl font-bold">
-          Total: {cart[0]?.currency} {total.toFixed(2)}
+          Total {formatCurrency(total, cart[0]?.currency)}
         </div>
       </div>
     </div>
