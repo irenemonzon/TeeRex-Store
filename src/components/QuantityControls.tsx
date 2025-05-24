@@ -15,6 +15,7 @@ const QuantityControls = ({ quantity, max, onIncrease, onDecrease ,  isCard=fals
         onClick={onDecrease}
         disabled={ !isCard &&quantity <= 1}
         className="bg-gray-200 rounded-full p-1 hover:bg-gray-300 disabled:opacity-50"
+        aria-label='decrease-quantity'
       >
         <Minus size={16} />
       </button>
@@ -24,6 +25,7 @@ const QuantityControls = ({ quantity, max, onIncrease, onDecrease ,  isCard=fals
       <button
         onClick={onIncrease}
         disabled={quantity >= max}
+        aria-label='increase-quantity'
         className="bg-gray-200 rounded-full p-1 hover:bg-gray-300 disabled:opacity-50"
       >
         <Plus size={16} />

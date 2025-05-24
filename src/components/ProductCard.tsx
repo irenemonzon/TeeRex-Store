@@ -79,6 +79,7 @@ const ProductCard = ({ product }: Props) => {
               }`}
               onClick={handleAddCart}
               disabled={remainingStock === 0}
+              aria-label='add to cart'
             >
               Add to Cart
             </button>

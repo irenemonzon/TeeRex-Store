@@ -68,6 +68,7 @@ const Cart = () => {
               onClick={() => removeItem(item.id)}
               className="text-red-500 mt-2 hover:text-red-700 transition-colors"
               title="Remove"
+              aria-label='Remove'
             >
               <Trash2 size={18} />
             </button>

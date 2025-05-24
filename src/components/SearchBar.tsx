@@ -35,7 +35,7 @@ const SearchBar = () => {
         placeholder="Search products by name, color, or type (e.g. green polo)"
         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         onChange={(e) => handleChange(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
       />
       <div>
         <button
