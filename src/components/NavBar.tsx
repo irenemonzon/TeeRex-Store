@@ -21,7 +21,7 @@ const Navbar = () => {
       </Link>
 
       <div className="relative">
-        <a href="/cart">
+        <a href="/cart" aria-label="cart">
           <ShoppingCart className="w-6 h-6 text-gray-800 hover:text-blue-600 transition-colors" />
         </a>
         {quantity > 0 && (

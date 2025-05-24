@@ -14,6 +14,7 @@ const Home = () => {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const getData = async () => {
