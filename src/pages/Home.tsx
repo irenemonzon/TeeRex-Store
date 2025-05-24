@@ -8,18 +8,21 @@ import type { FilterType, Product } from "../types"
 
 const Home = () => {
 
-  const [products, setProducts] = useState<Product[]>([])
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const filters = useFilterStore((state) => state.filters);
   const searchQuery = useFilterStore((state) => state.searchSubmitted);
   const setFilters = useFilterStore((state) => state.setFilters);
+   const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
     const getData = async () => {
+       setLoading(true);
       const products = await getProducts()
       setProducts(products)
       setFilteredProducts(products)
+      setLoading(false)
     }
     getData()
   }, [])
@@ -77,13 +80,20 @@ const Home = () => {
     setFilters({ ...filters, [type]: newValues });
   };
 
+ 
+
   return (
     <div className="p-4">
       <SearchBar />
       <div className="flex flex-col md:flex-row gap-4 mt-4">
         <Filters filters={filters} onFilterChange={handleFilterChange} />
         <div className="flex-1">
-          {filteredProducts.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center min-h-[200px] text-gray-500 mt-10">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mr-2" />
+              <p>Loading products...</p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="text-center text-gray-500 mt-8">
               No products found.
             </div>
