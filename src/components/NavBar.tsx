@@ -1,14 +1,21 @@
-import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ShoppingCart } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { useFilterStore } from '../store/filterStore';
 import logo from '../assets/logo.svg'
 
 const Navbar = () => {
   const quantity=useCartStore((state)=>state.getCartQuantity())
+   const resetFilters = useFilterStore((state) => state.resetFilters);
+  
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white">
-      <Link to="/" className="text-2xl font-bold text-blue-600 flex gap-4">
+      <Link 
+        to="/" 
+        className="text-2xl font-bold text-blue-600 flex gap-4" 
+        onClick={resetFilters}
+      >
         <img src={logo}alt='TeeRex Store' className='w-10 h-10'/>
         TeeRex
       </Link>

@@ -1,22 +1,29 @@
-import { useState } from 'react';
 import type { KeyboardEvent } from 'react';
+import { useFilterStore } from '../store/filterStore';
 
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-}
-
-const SearchBar = ({ onSearch }: SearchBarProps) => {
-  const [inputValue, setInputValue] = useState('');
+const SearchBar = () => {
+  const searchQuery = useFilterStore((state) => state.searchQuery);
+  const setSearchQuery = useFilterStore((state) => state.setSearchQuery);
+  const setSearchSubmitted = useFilterStore((state) => state.setSearchSubmitted);
 
   const handleSearch = () => {
-    if (inputValue.trim()) {
-      onSearch(inputValue.trim());
+    const trimmed = searchQuery.trim();
+    if (trimmed) {
+      setSearchSubmitted(trimmed);
     }
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue.trim()) {
-      onSearch(inputValue.trim());
+    const trimmed = searchQuery.trim();
+    if (e.key === 'Enter' && trimmed) {
+      setSearchSubmitted(trimmed);
+    }
+  };
+
+    const handleChange = (value: string) => {
+    setSearchQuery(value);
+    if (value.trim() === '') {
+      setSearchSubmitted('');
     }
   };
 
@@ -24,17 +31,17 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     <div className="w-full max-w-xl flex gap-2">
       <input
         type="text"
-        value={inputValue}
-        placeholder="Search by name, color, or type (e.g. green polo)"
+        value={searchQuery}
+        placeholder="Search products by name, color, or type (e.g. green polo)"
         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         onKeyPress={handleKeyPress}
       />
-      <div className="search-button-container">
+      <div>
         <button
           onClick={handleSearch}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          disabled={!inputValue.trim()}
+          className="search-button-container px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          disabled={!searchQuery.trim()}
         >
           Search
         </button>

@@ -1,7 +1,7 @@
-import {toast} from 'sonner'
-import { useCartStore } from "../store/cartStore";
-import type { Product } from "../types";
-
+import { toast } from 'sonner';
+import { useCartStore } from '../store/cartStore';
+import type { Product } from '../types';
+import QuantityControls from './QuantityControls';
 
 interface Props {
   product: Product;
@@ -10,35 +10,79 @@ interface Props {
 const ProductCard = ({ product }: Props) => {
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
+  const increaseQuantity = useCartStore((state) => state.increaseQuantity);
+  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
+
+  const cartItem = cart.find((item) => item.id === product.id);
+  const currentQty = cartItem?.quantityTotalCart || 0;
+  const remainingStock = product.quantity - currentQty;
 
   const handleAddCart = () => {
-    const cartItem = cart.find(item => item.id === product.id);
-    
-    if (cartItem && cartItem.quantityTotalCart >= product.quantity) {
+    if (remainingStock <= 0) {
       toast.error('Maximum available quantity reached');
       return;
     }
-    
+
     addToCart(product);
     toast.success(`${product.name} added to cart`);
   };
 
   return (
-    <div className="border p-4 rounded-xl flex flex-col items-center shadow-md hover:shadow-lg transition-shadow">
+    <div className="border p-4 rounded-xl flex flex-col items-start shadow-md hover:shadow-lg transition-shadow">
       <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
-      <img src={product.imageURL} alt={product.name} className="w-40 h-40 object-contain mb-4" />
-      <div className="flex flex-col items-center w-full gap-2">
-        <div className="flex justify-between items-center w-full">
-          <span className="text-base font-bold">{product.currency} {product.price.toFixed(2)}</span>
-          <span className="text-sm text-gray-500">Stock: {product.quantity}</span>
+      <img
+        src={product.imageURL}
+        alt={product.name}
+        className="w-full h-40 object-contain mb-4"
+      />
+      <div className='flex w-full justify-between'>
+        <div className='flex flex-col mt-4'>
+          <span className="text-base font-bold">
+            {product.currency} {product.price.toFixed(2)}
+          </span>
+          <span
+            className={`text-sm mt-1 ${
+              remainingStock === 0
+                ? 'text-red-600'
+                : remainingStock === 1
+                ? 'text-orange-500'
+                : 'text-gray-500'
+            }`}
+          >
+            {remainingStock === 0
+              ? 'Out of Stock'
+              : `Stock: ${remainingStock}`}
+          </span>
         </div>
-        <button 
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleAddCart}
-          disabled={product.quantity === 0}
-        >
-          {product.quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
-        </button>
+        <div className="mt-4 ">
+          {currentQty > 0 ? (
+            <QuantityControls
+              quantity={currentQty}
+              max={product.quantity}
+              onIncrease={() => {
+                if (currentQty < product.quantity) {
+                  increaseQuantity(product.id);
+                } else {
+                  toast.error('Maximum available quantity reached');
+                }
+              }}
+              onDecrease={() => decreaseQuantity(product.id)}
+              isCard
+            />
+          ) : (
+            <button
+              className={`px-4 py-2 rounded text-white transition-colors ${
+                remainingStock === 0
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+              onClick={handleAddCart}
+              disabled={remainingStock === 0}
+            >
+              Add to Cart
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,7 @@
 import { useCartStore } from '../store/cartStore';
-import {
-  Minus,
-  Plus,
-  Trash2
-} from 'lucide-react';
+import {Trash2} from 'lucide-react';
 import { toast } from 'sonner';
+import QuantityControls from '../components/QuantityControls';
 
 const Cart = () => {
   const cart = useCartStore((state) => state.cart);
@@ -52,28 +49,15 @@ const Cart = () => {
               {item.currency} {item.price.toFixed(2)} each
             </p>
             <p className="text-xs text-gray-400 mt-1">
-              Available: {item.quantity}
+              Available: {item.quantity -item.quantityTotalCart}
             </p>
 
-            <div className="flex items-center mt-2 gap-2">
-              <button
-                onClick={() => decreaseQuantity(item.id)}
-                className="bg-gray-200 rounded-full p-1 hover:bg-gray-300 disabled:opacity-50"
-                disabled={item.quantityTotalCart <= 1}
-              >
-                <Minus size={16} />
-              </button>
-
-              <span className="px-2 font-medium">{item.quantityTotalCart}</span>
-
-              <button
-                onClick={() => handleIncreaseQuantity(item.id, item.quantityTotalCart, item.quantity)}
-                className="bg-gray-200 rounded-full p-1 hover:bg-gray-300 disabled:opacity-50"
-                disabled={item.quantityTotalCart >= item.quantity}
-              >
-                <Plus size={16} />
-              </button>
-            </div>
+            <QuantityControls
+              quantity={item.quantityTotalCart}
+              max={item.quantity}
+              onIncrease={() => handleIncreaseQuantity(item.id, item.quantityTotalCart, item.quantity)}
+              onDecrease={() => decreaseQuantity(item.id)}
+            />
           </div>
 
           <div className="text-right">
