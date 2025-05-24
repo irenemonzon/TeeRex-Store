@@ -37,7 +37,7 @@ const ProductCard = ({ product }: Props) => {
         className="w-full h-40 object-contain mb-4"
       />
       <div className='flex w-full justify-between'>
-        <div className='flex flex-col mt-4'>
+        <div className='flex flex-col mt-4 w-2/4'>
           <span className="text-base font-bold">
             {formatCurrency(product.price, product.currency)}
           </span>
@@ -55,7 +55,7 @@ const ProductCard = ({ product }: Props) => {
               : `Stock: ${remainingStock}`}
           </span>
         </div>
-        <div className="mt-4 ">
+        <div className="mt-4">
           {currentQty > 0 ? (
             <QuantityControls
               quantity={currentQty}
